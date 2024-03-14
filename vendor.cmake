@@ -11,10 +11,5 @@ FetchContent_MakeAvailable(firm)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(usb REQUIRED IMPORTED_TARGET libusb)
 
-message(STATUS "Fetching libftdi...")
-FetchContent_Declare(
-  libftdi
-  GIT_REPOSITORY "git://developer.intra2net.com/libftdi"
-  GIT_TAG "de9f01ec"
-)
-FetchContent_MakeAvailable(libftdi)
+add_subdirectory(${PROJECT_SOURCE_DIR}/libftdi)
+include(libftdi/cmake/UseLibFTDI1.cmake)

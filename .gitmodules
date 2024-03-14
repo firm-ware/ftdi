@@ -1,0 +1,3 @@
+[submodule "libftdi"]
+	path = libftdi
+	url = git@github.com:sehrgutesoftware/libftdi.git

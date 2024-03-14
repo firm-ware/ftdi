@@ -9,7 +9,7 @@ list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/src/uart.cpp)
 add_library(firm_ftdi ${sources})
 target_include_directories(firm_ftdi PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${libftdi_SOURCE_DIR}/src # the target exported by libftdi's cmake seems to be missing public include directories
+    ${CMAKE_CURRENT_SOURCE_DIR}/libftdi/src # I don't understand libftdi's CMakeLists.txt
 )
 target_link_libraries(firm_ftdi
     firm_uart

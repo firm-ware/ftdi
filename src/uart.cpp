@@ -57,33 +57,28 @@ void FTDI::poll() {
         return;
     }
 
-    // First check if there is a break condition or parity/framing error
     uint16_t status;
-    bool breakReceived = false;
-    int err = ftdi_poll_modem_status(&this->ctx, &status);
-    if (err < 0) {
-        this->log->error("[FTDI] Failed to poll modem status: %s", ftdi_get_error_string(&this->ctx));
-        return;
-    }
-    if (status & (1 << (8 + 2))) {
-        this->handler->uartSignal(firm::uart::ERR_PARITY);
-    }
-    if (status & (1 << (8 + 3))) {
-        this->handler->uartSignal(firm::uart::ERR_FRAME);
-    }
-    if (status & (1 << (8 + 4))) {
-        breakReceived = true;
-        this->handler->uartSignal(firm::uart::BREAK);
-    }
-
-    // Check for new data
-    int read = ftdi_read_data(&this->ctx, this->rxBuffer, this->rxBufferSize);
+    int read = ftdi_read_data_and_status(&this->ctx, this->rxBuffer, this->rxBufferSize, &status);
     if (read < 0) {
         this->log->error("[FTDI] Failed to read data: %s", ftdi_get_error_string(&this->ctx));
         return;
     }
 
-    // In case of a BREAK the buffer seems to contain a leading 0x00
+    // First check if there is a break condition or parity/framing error
+    bool breakReceived = false;
+    if (status & ftdi_modem_status::PE) {
+        this->handler->uartSignal(firm::uart::ERR_PARITY);
+    }
+    if (status & ftdi_modem_status::FE) {
+        this->handler->uartSignal(firm::uart::ERR_FRAME);
+    }
+    if (status & ftdi_modem_status::BI) {
+        breakReceived = true;
+        this->handler->uartSignal(firm::uart::BREAK);
+    }
+
+    // In case of a BREAK the buffer seems to contain a leading 0x00,
+    // which we have to discard.
     int start = breakReceived ? 1 : 0;
     for (int i = start; i < read; i++) {
         this->handler->uartData(this->rxBuffer[i]);
