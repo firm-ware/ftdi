@@ -1,1 +1,5 @@
 build
+ftd2xx/*
+!ftd2xx/CMakeLists.txt
+.vscode/*
+!variants.yaml

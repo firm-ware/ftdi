@@ -2,7 +2,12 @@
 
 #include "firm/logging/logger.hpp"
 #include "firm/uart.hpp"
+
+#ifdef LIBFTDI
 #include "ftdi.h"
+#else
+#include "ftd2xx.h"
+#endif
 
 namespace firm {
 namespace ftdi {
@@ -28,12 +33,18 @@ public:
      */
     FTDI(uint8_t *rxBuffer, size_t rxBufferSize, firm::logging::Logger *log)
         : rxBuffer(rxBuffer), rxBufferSize(rxBufferSize), log(log), handler(NULL), rxEnabled(false) {
+#ifdef LIBFTDI
         ftdi_init(&this->ctx);
+#endif
     };
 
     ~FTDI() {
+#ifdef LIBFTDI
         ftdi_usb_close(&this->ctx);
         ftdi_deinit(&this->ctx);
+#else
+        FT_Close(this->ctx);
+#endif
     };
 
     /**
@@ -80,7 +91,11 @@ public:
     void registerHandler(firm::uart::Handler *handler);
 
 private:
+#ifdef LIBFTDI
     struct ftdi_context ctx;
+#else
+    FT_HANDLE ctx;
+#endif
 
     uint8_t *rxBuffer;
     size_t rxBufferSize;
@@ -88,11 +103,13 @@ private:
     firm::logging::Logger *log;
     firm::uart::Handler *handler;
 
+#ifdef LIBFTDI
     struct {
         ftdi_bits_type bits;
         ftdi_stopbits_type stopbits;
         ftdi_parity_type parity;
     } props;
+#endif
 
     bool rxEnabled;
 };

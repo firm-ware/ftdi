@@ -1,5 +1,4 @@
 include(FetchContent)
-
 message(STATUS "Fetching firm...")
 FetchContent_Declare(
   firm
@@ -10,6 +9,3 @@ FetchContent_MakeAvailable(firm)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(usb REQUIRED IMPORTED_TARGET libusb)
-
-add_subdirectory(${PROJECT_SOURCE_DIR}/libftdi)
-include(libftdi/cmake/UseLibFTDI1.cmake)

@@ -1,0 +1,25 @@
+buildType:
+  default: debug
+  choices:
+    debug:
+      short: Debug
+      long: Emit debug information
+      buildType: Debug
+    release:
+      short: Release
+      long: Optimize generated code
+      buildType: Release
+
+ftdiImplementation:
+  default: libftdi
+  choices:
+    libftdi:
+      short: libftdi
+      long: Fully open-source implementation
+      settings:
+        FTDI_IMPLEMENTATION: libftdi
+    ftd2xx:
+      short: ftd2xx
+      long: FTDI's proprietary binary-only implementation
+      settings:
+        FTDI_IMPLEMENTATION: ftd2xx
