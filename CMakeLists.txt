@@ -8,7 +8,7 @@ set(FTDI_IMPLEMENTATION "libftdi" CACHE STRING "The FTDI implementation to use (
 include(vendor.cmake)
 if (FTDI_IMPLEMENTATION STREQUAL "libftdi")
     include(vendor-libftdi.cmake)
-    set(FTDI_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/libftdi/src) # I don't understand libftdi's CMakeLists.txt
+    set(FTDI_INCLUDES ${libftdi_SOURCE_DIR}/src) # I don't understand libftdi's CMakeLists.txt
     set(FTDI_LIBRARIES ftdi1)
     set(TARGET_DEFINITION LIBFTDI)
 elseif (FTDI_IMPLEMENTATION STREQUAL "ftd2xx")
