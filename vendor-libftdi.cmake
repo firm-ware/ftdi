@@ -1,3 +1,4 @@
+set(FTDI_EEPROM OFF)
 message(STATUS "Fetching libftdi...")
 FetchContent_Declare(
   libftdi
