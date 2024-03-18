@@ -13,14 +13,17 @@ int main() {
 #ifdef LIBFTDI
     ftdi_context *ctx = ftdi_new();
     if (ftdi_usb_open(ctx, 0x0403, 0x6001)) {
+        std::cerr << "Failed to open USB device" << std::endl;
         return -1;
     }
 
     if (ftdi_set_baudrate(ctx, 250000)) {
+        std::cerr << "Failed to set baud rate" << std::endl;
         return -1;
     }
 
     if (ftdi_set_line_property(ctx, BITS_8, STOP_BIT_2, NONE)) {
+        std::cerr << "Failed to data characteristics" << std::endl;
         return -1;
     }
 #else
@@ -34,7 +37,7 @@ int main() {
 
     FT_STATUS status = FT_Open(0, &ctx);
     if (status != FT_OK) {
-        std::cerr << "Failed to open device" << std::endl;
+        std::cerr << "Failed to open USB device" << std::endl;
         return -1;
     }
 
