@@ -2,10 +2,14 @@ include(FetchContent)
 message(STATUS "Fetching firm...")
 FetchContent_Declare(
   firm
-  GIT_REPOSITORY "git@github.com:firm-ware/firm.git"
-  GIT_TAG "v4.1.0"
+  GIT_REPOSITORY "https://github.com/firm-ware/firm"
+  GIT_TAG "v4.2.1"
 )
-FetchContent_MakeAvailable(firm)
+message(STATUS "Fetching libusb...")
+FetchContent_Declare(
+  libusb
+  GIT_REPOSITORY "https://github.com/libusb/libusb-cmake.git"
+  GIT_TAG "main"
+)
+FetchContent_MakeAvailable(firm libusb)
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(usb REQUIRED IMPORTED_TARGET libusb)
